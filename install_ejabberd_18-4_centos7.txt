@@ -1,0 +1,102 @@
+INSTALL EJJABERD CENTOS 7 -- 01-jun-2018 -- João Pedro Alexandroni --
+---------------------------------------------------------------------
+
+Requirements (eJABBERD 18.4):
+
+	- GNU Make.
+	- GCC.
+	- Libexpat 1.95 or higher.
+	- Libyaml 0.1.4 or higher.
+	- Erlang/OTP 17.5 or higher.
+	- OpenSSL 1.0.0 or higher, for STARTTLS, SASL and SSL encryption.
+	- Zlib 1.2.3 or higher, for Stream Compression support (XEP-0138). Optional.
+	- PAM library. Optional. For Pluggable Authentication Modules (PAM).
+	- GNU Iconv 1.8 or higher, for the IRC Transport (mod_irc). Optional. Not needed on systems with GNU Libc.
+	- ImageMagick's Convert program. Optional. For CAPTCHA challenges.
+
+0 - update
+	0.1 -> sudo yum -y update && sudo yum -y upgrade
+	
+--------------------------------------------------------------------------------------------------------------------------------------------
+1 - Install Latest Erlang/OTP [Latest: OTP 20.3]
+	
+	1.1 - Install dependences
+		-> sudo yum install gcc gcc-c++ glibc-devel make ncurses-devel openssl-devel autoconf java-1.8.0-openjdk-devel git wget wxBase.x86_64
+		
+		-> If necessary, install:
+			-> yum install fop
+		    -> yum install openssl
+		    -> yum install -y openssl-devel
+		    -> yum install unixODBC unixODBC-devel
+		    -> yum install ncurses-devel.x86_64
+		    -> yum install wxGTK
+		    -> yum install wxGTK-devel
+		    -> yum install gtk2-devel
+		    -> yum install gcc gcc-c++
+		
+	1.2 - Go to: https://www.erlang.org/downloads
+		-> Select OTP 20.3 Source File (Or higher)
+		-> wget "http://erlang.org/download/otp_src_20.3.tar.gz"
+		-> Uncompress file
+		  --> tar zxvf otp_src_20.3.tar.gz
+		-> cd otp_src_20.3
+		-> ./configure
+		-> make
+		-> make install		
+		
+	1.2.1 - Or instead == Go to: https://packages.erlang-solutions.com/erlang/
+	
+		-> wget https://packages.erlang-solutions.com/erlang-solutions-1.0-1.noarch.rpm
+		-> rpm -Uvh erlang-solutions-1.0-1.noarch.rpm
+		-> sudo yum install erlang
+		-> sudo yum install esl-erlang
+		
+	1.3 - Test Erlang/OTP
+		-> erl
+		[result] -> Erlang/OTP 20 [erts-9.3] [source] [64-bit] [smp:1:1] [ds:1:1:10] [async-threads:10] [hipe] [kernel-poll:false]
+
+					Eshell V9.3 
+					
+--------------------------------------------------------------------------------------------------------------------------------------------
+2 - Install Ejabberd [Latest: 18.4]
+
+	2.1 - Go to: https://www.process-one.net/en/ejabberd/downloads
+		-> Donwload the Linux Installer (.run)
+			--> wget https://www.process-one.net/downloads/downloads-action.php?file=/ejabberd/18.04/ejabberd-18.04-linux-x86_64-installer.run
+		
+		-> Change name (just to make easier)
+			--> mv downloads-action.php?file=/ejabberd/18.04/ejabberd-18.04-linux-x86_64-installer.run ejabberd-18.04-linux-x86_64-installer.run
+		
+		-> execute
+			--> chmod +x ejabberd-18.04-linux-x86_64-installer.run
+			--> ./ejabberd-18.04-linux-x86_64-installer.run
+			
+		-> go to ejabberd instalation folder (by default /opt/ejabberd-18.4)
+			--> cd /opt/ejabberd-18.4
+			--> cd /bin
+		
+		-> execute ejabberd
+			--> ./ejabberdctl start
+			--> ./ejabberdctl status
+			--> systemctl status ejabberd
+		
+		*DOCS:  https://docs.ejabberd.im/
+				https://www.erlang.org/
+		
+--------------------------------------------------------------------------------------------------------------------------------------------			
+3 - Verify Firewall Rules and Lisetners Ports
+
+	-> netstat -tupln
+		[result]tcp6       0      0 :::5280                 :::*                    LISTEN      1834/beam.smp
+				tcp6       0      0 :::5222                 :::*                    LISTEN      1834/beam.smp
+				tcp6       0      0 :::5269                 :::*                    LISTEN      1834/beam.smp
+
+	-> Verify Firewalls rules on port 5280, 5222, 5269
+	
+	//disable firewall to test
+		--> systemctl disable firewalld
+		--> systemctl stop firewalld
+	
+	-> go to ejabberd web admin: http:ip-of-ejabberd-server:5280/admin
+		--> enter the admin credentials created on installation of ejabberd
+
