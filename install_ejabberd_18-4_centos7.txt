@@ -1,4 +1,4 @@
-INSTALL EJJABERD CENTOS 7 -- 01-jun-2018 -- João Pedro Alexandroni --
+INSTALL EJJABERD CENTOS 7 -- 01-jun-2018 --
 ---------------------------------------------------------------------
 
 Requirements (eJABBERD 18.4):
