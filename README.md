@@ -11,3 +11,5 @@ This is a few tutorials that I've made for me based on a lot of incomplete tutor
 Tutorials:
 
   1 - Ejabberd 18.04
+  
+  2 - Solr 7.3.1
